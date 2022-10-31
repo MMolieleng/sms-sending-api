@@ -14,6 +14,9 @@ router.use((req, res, next) => {
 });
 
 router.post("/", (req, res) => {
+  const { message, to } = req.body;
+  console.log({ message });
+  console.log({ to });
   res.json({ message: "message", status: 200 }).status(201);
 });
 
