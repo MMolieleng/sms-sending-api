@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const app = express();
 
@@ -5,6 +6,7 @@ const sms = require("./sms/index");
 
 const port = process.env.PORT || 3000;
 
+app.use(json());
 app.use("/api/v1/send/sms", sms);
 
 app.get("/status", (req, res) => {
