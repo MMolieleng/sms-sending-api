@@ -16,7 +16,7 @@ app.use(json());
 app.use("/api/v1/send/sms", require("./sms/index"));
 app.use("/api/v1/users", require("./users/index"));
 
-app.get("/send", async (req, res) => {
+app.post("/send", async (req, res) => {
   const { to, text } = req.body;
   const responseMsg = await panaceaSender(to, text);
 
