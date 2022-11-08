@@ -20,19 +20,25 @@ app.post("/send", async (req, res) => {
   const { to, text } = req.body;
 
   try {
-    const downstreamResponse = await panaceaSender(to, text);
-
     const storedMessage = new SMSMessage({
       to: to,
       text: text,
       reportMask: 31,
-      report_url: `https://firesms-sender-api.azurewebsites.net/receive-report?${shortid.generate()}`,
+      reportUrl: `https://firesms-sender-api.azurewebsites.net/receive-report?${shortid.generate()}`,
     });
 
+    const downstreamResponse = await panaceaSender(
+      to,
+      text,
+      storedMessage.reportUrl,
+      storedMessage.reportMask
+    );
+
     console.log({ downstreamResponse });
+
     const sendMessage = await storedMessage.save();
-    console.log({ sendMessage });
-    res.json({ downstreamResponse, sendMessage }).statusCode(201);
+
+    res.status(201).json({ sendMessage });
   } catch (error) {
     console.error(error.message);
     console.error({ error });

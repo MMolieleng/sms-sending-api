@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const panaceaSender = async (to, text) => {
+const panaceaSender = async (to, text, reportUrl, mask) => {
   const params = {
     action: "message_send",
     username: process.env.P_USERNAME,
@@ -8,6 +8,8 @@ const panaceaSender = async (to, text) => {
     text: text,
     to: to,
     from: "Fire A",
+    report_url: reportUrl,
+    report_mask: mask,
   };
 
   const mURL = `https://api.panaceamobile.com/json`;
