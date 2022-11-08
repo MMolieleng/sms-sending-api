@@ -1,4 +1,6 @@
-const panaceaSender = async ({ to, text }) => {
+const axios = require("axios");
+
+const panaceaSender = async (to, text) => {
   const params = {
     action: "message_send",
     username: process.env.P_USERNAME,

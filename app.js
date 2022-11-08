@@ -18,18 +18,26 @@ app.use("/api/v1/users", require("./users/index"));
 
 app.post("/send", async (req, res) => {
   const { to, text } = req.body;
-  const responseMsg = await panaceaSender(to, text);
 
-  const storedMessage = new SMSMessage({
-    to: to,
-    text: text,
-    reportMask: 31,
-    report_url: `https://firesms-sender-api.azurewebsites.net/receive-report?${shortid.generate()}`,
-  });
+  try {
+    const downstreamResponse = await panaceaSender(to, text);
 
-  const sendMessage = await storedMessage.save();
+    const storedMessage = new SMSMessage({
+      to: to,
+      text: text,
+      reportMask: 31,
+      report_url: `https://firesms-sender-api.azurewebsites.net/receive-report?${shortid.generate()}`,
+    });
 
-  res.json({ downstream: responseMsg, savedMessage: sendMessage });
+    console.log({ downstreamResponse });
+    const sendMessage = await storedMessage.save();
+    console.log({ sendMessage });
+    res.json({ downstreamResponse, sendMessage }).statusCode(201);
+  } catch (error) {
+    console.error(error.message);
+    console.error({ error });
+    res.json({ message: "Message sending failed", to: to, text: text });
+  }
 });
 
 app.post("/receive-report", (req, res) => {
@@ -47,8 +55,8 @@ app.get("/status", (req, res) => {
 });
 
 app.listen(port, async () => {
-  const DB_URL = await process.env.MONGO_URI;
-  console.log({ DB_URL });
+  // const DB_URL = await process.env.MONGO_URI;
+
   mongoose
     .connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
