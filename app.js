@@ -1,21 +1,35 @@
-const { json } = require("express");
-const express = require("express");
-const { default: mongoose } = require("mongoose");
-const shortid = require("shortid");
+import json from "express";
+import express from "express";
 
-const SMSMessage = require("./models/sms");
-const panaceaSender = require("./sms/sender");
+import { mongoose } from "mongoose";
+// const shortid = require("shortid");
+import shortid from "shortid";
+
+// const SMSMessage = require("./models/sms");
+import SMSMessage from "./models/sms.js";
+
+// const panaceaSender = require("./sms/sender");
+import panaceaSender from "./sms/sender.js";
 const app = express();
 
 const port = process.env.PORT || 3000;
 
 // Load .env file
-require("dotenv").config();
+import dotenv from "dotenv";
+
+import smsRoutes from "./sms/index.js";
+// require("./users/index");
+
+import userRoutes from "./users/index.js";
+dotenv.config();
 
 app.use(json());
-app.use("/api/v1/send/sms", require("./sms/index"));
-app.use("/api/v1/users", require("./users/index"));
+app.use("/api/v1/send/sms", smsRoutes);
+app.use("/api/v1/users", userRoutes);
 
+/**
+ * This is for reports
+ */
 app.post("/send", async (req, res) => {
   const { to, text } = req.body;
 
@@ -34,11 +48,11 @@ app.post("/send", async (req, res) => {
       storedMessage.reportMask
     );
 
-    console.log({ downstreamResponse });
+    console.info({ downstreamResponse });
 
     const sendMessage = await storedMessage.save();
 
-    res.status(201).json({ sendMessage });
+    res.status(201).json({ downstreamResponse, sendMessage });
   } catch (error) {
     console.error(error.message);
     console.error({ error });
@@ -69,6 +83,6 @@ app.listen(port, async () => {
       useUnifiedTopology: true,
     })
     .then(() => console.log("Database Connected"))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
   console.log(`Example app listening on port ${port}`);
 });

@@ -1,9 +1,11 @@
-const express = require("express");
-const User = require("../models/user");
-const router = express.Router();
-const { body, validationResult } = require("express-validator");
+import express from "express";
 
-router.use(async (req, res, next) => {
+const smsRoutes = express.Router();
+
+import { body } from "express-validator";
+import User from "../models/user.js";
+
+smsRoutes.use(async (req, res, next) => {
   console.log("Time : ", Date.now());
   const headers = req.headers;
   const { authorization } = headers;
@@ -11,7 +13,9 @@ router.use(async (req, res, next) => {
     const users = await User.find()
       .select("-password -account.apiKey")
       .populate("account");
+    console.log({ users });
     if (users.authorization !== authorization.trim()) {
+      console.error("Token not provided");
       res.status(401).json({ message: "Invalid authorization token" });
       return;
     }
@@ -27,7 +31,7 @@ router.use(async (req, res, next) => {
   res.status(401).json({ message: "Authorization token not provided" });
 });
 
-router.post(
+smsRoutes.post(
   "/",
   body("message").isLength({ min: 1 }),
   body("to").isString().isLength(10),
@@ -39,4 +43,4 @@ router.post(
   }
 );
 
-module.exports = router;
+export default smsRoutes;

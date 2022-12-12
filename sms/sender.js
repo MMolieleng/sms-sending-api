@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 const panaceaSender = async (to, text, reportUrl, mask) => {
   const params = {
@@ -7,15 +7,16 @@ const panaceaSender = async (to, text, reportUrl, mask) => {
     password: process.env.P_PASSWORD,
     text: text,
     to: to,
-    from: "Fire A",
+    from: "Fire SMS",
     report_url: reportUrl,
     report_mask: mask,
   };
 
   const mURL = `https://api.panaceamobile.com/json`;
   const response = await axios.get(mURL, { params });
+  const data = response.data;
 
-  return { response, messageData: params };
+  return { data };
 };
 
-module.exports = panaceaSender;
+export default panaceaSender;

@@ -1,4 +1,4 @@
-const { model, Schema } = require("mongoose");
+import { model, Schema } from "mongoose";
 
 const smsReport = new Schema({
   to: {
@@ -40,4 +40,4 @@ const smsMessage = new Schema(
 
 const SMSMessage = model("smsMessage", smsMessage);
 
-module.exports = SMSMessage;
+export default SMSMessage;
