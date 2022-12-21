@@ -10,6 +10,7 @@ smsRoutes.use(async (req, res, next) => {
   const headers = req.headers;
   const { authorization } = headers;
   if (authorization) {
+    // TODO : Do proper checks here
     const users = await User.find()
       .select("-password -account.apiKey")
       .populate("account");

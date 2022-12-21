@@ -1,5 +1,5 @@
-import json from "express";
-import express from "express";
+import express, { json } from "express";
+
 
 import { mongoose } from "mongoose";
 // const shortid = require("shortid");
