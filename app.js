@@ -1,31 +1,34 @@
 import express, { json } from "express";
 
-
 import { mongoose } from "mongoose";
-// const shortid = require("shortid");
 import shortid from "shortid";
-
-// const SMSMessage = require("./models/sms");
-import SMSMessage from "./models/sms.js";
-
-// const panaceaSender = require("./sms/sender");
-import panaceaSender from "./sms/sender.js";
-const app = express();
-
-const port = process.env.PORT || 3000;
-
 // Load .env file
 import dotenv from "dotenv";
 
+// Models
+import SMSMessage from "./models/sms.js";
+import panaceaSender from "./sms/sender.js";
 import smsRoutes from "./sms/index.js";
-// require("./users/index");
-
 import userRoutes from "./users/index.js";
+import escrowRoutes from "./escrow/index.js";
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Load dotenv configs
 dotenv.config();
 
 app.use(json());
+
+// For Sending SMS
 app.use("/api/v1/send/sms", smsRoutes);
+
+// User Routes
 app.use("/api/v1/users", userRoutes);
+
+
+// Escrow / Admin Routes
+app.use("/api/v1/escrow", escrowRoutes);
 
 /**
  * This is for reports
