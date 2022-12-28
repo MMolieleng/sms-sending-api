@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext", // Previousely ESNext
+    "lib": [
+      "es6"
+    ],
+    "allowJs": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "tsc-watch": {
+    // these options are overrides used only by ts-node
+    "compilerOptions": {
+      "module": "ESNext",
+      "target": "ESNext",
+      "esModuleInterop": true
+    }
+  },
+}
