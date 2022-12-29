@@ -23,5 +23,23 @@ class UserRepository {
             .select("-password")
             .populate("account");
     }
+    async findUserAccountByAPIKey(apiKey) {
+        const dbResponse = await user_js_1.default.findOne({ "account.apiKey": apiKey })
+            .select("-password")
+            .populate("account");
+        const account = dbResponse?.account;
+        if (!account || !account.apiKey || !account.balance || account.apiKey === undefined || account.balance === undefined) {
+            throw new Error("Account has missing data, please create a new account");
+        }
+        const accountDto = {
+            apiKey: account.apiKey,
+            balance: account.balance
+        };
+        return accountDto;
+    }
+    async updateAccountByApiKey(newAccountBalance, apiKey) {
+        const updatedAccount = await user_js_1.default.findOneAndUpdate({ "account.apiKey": apiKey }, { $set: { "account.balance": newAccountBalance } }, { new: true, upsert: true });
+        return updatedAccount;
+    }
 }
 exports.default = new UserRepository;

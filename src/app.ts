@@ -11,7 +11,7 @@ import smsRoutes from "./sms/index.js";
 import userRoutes from "./users/index";
 import escrowRoutes from "./escrow/";
 import SMSController from "./controller/sms/SMSController";
-import { UserController } from "./controller/UsersController.js";
+import { UserController } from "./controller/UsersController";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,14 +21,10 @@ dotenv.config();
 
 app.use(express.json());
 
-app.get("/users", async (req, res) => {
-  const users = await SMSController.allUsers();
-  console.log({ users })
-  res.json({ users })
-})
+app.get("/api/v1/users", UserController)
 
 // For Sending SMS
-app.use("/api/v1/send/sms", smsRoutes);
+app.use("/api/v1/send/sms", SMSController);
 // app.use("/api/v1/sms/cost", smsRoutes)
 
 // User Routes

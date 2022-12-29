@@ -13,5 +13,11 @@ class UserService {
     async getAllUsers() {
         return await this.userRepository.findAllUsers();
     }
+    async findUserByAccount(accountDto) {
+        if (!accountDto || !accountDto.apiKey) {
+            throw new Error("API token not provided");
+        }
+        return await this.userRepository.findUserByApiKey(accountDto.apiKey);
+    }
 }
 exports.default = UserService;

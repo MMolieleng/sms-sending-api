@@ -7,25 +7,20 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 // Load .env file
 const dotenv_1 = __importDefault(require("dotenv"));
-const index_js_1 = __importDefault(require("./sms/index.js"));
 const escrow_1 = __importDefault(require("./escrow/"));
 const SMSController_1 = __importDefault(require("./controller/sms/SMSController"));
-const UsersController_js_1 = require("./controller/UsersController.js");
+const UsersController_1 = require("./controller/UsersController");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 // Load dotenv configs
 dotenv_1.default.config();
 app.use(express_1.default.json());
-app.get("/users", async (req, res) => {
-    const users = await SMSController_1.default.allUsers();
-    console.log({ users });
-    res.json({ users });
-});
+app.get("/api/v1/users", UsersController_1.UserController);
 // For Sending SMS
-app.use("/api/v1/send/sms", index_js_1.default);
+app.use("/api/v1/send/sms", SMSController_1.default);
 // app.use("/api/v1/sms/cost", smsRoutes)
 // User Routes
-app.use("/api/v1/users", UsersController_js_1.UserController);
+app.use("/api/v1/users", UsersController_1.UserController);
 // Escrow / Admin Routes
 app.use("/api/v1/escrow", escrow_1.default);
 /**

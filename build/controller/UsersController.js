@@ -13,3 +13,12 @@ UserController.get("/", async (request, response) => {
     const users = await userService.getAllUsers();
     response.json(users).status(201);
 });
+UserController.post("/", async (request, response) => {
+    const { emailAddress, phoneNumber, password, acceptedTerm } = request.body;
+    if (!emailAddress || !phoneNumber || !password || !acceptedTerm) {
+        response.json({ message: "Please provide all requred fields" })
+            .status(400);
+        return;
+    }
+    return await userService.getAllUsers();
+});

@@ -10,5 +10,17 @@ UserController.get("/", async (request: Request, response: Response) => {
         response.json(users).status(201)
 })
 
+UserController.post("/", async (request: Request, response: Response) => {
+        const { emailAddress, phoneNumber, password, acceptedTerm } = request.body
+
+        if (!emailAddress || !phoneNumber || !password || !acceptedTerm) {
+                response.json({ message: "Please provide all requred fields" })
+                        .status(400)
+                return
+        }
+
+        return await userService.getAllUsers();
+})
+
 
 export { UserController }
