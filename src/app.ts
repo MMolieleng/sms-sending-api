@@ -11,6 +11,7 @@ import smsRoutes from "./sms/index.js";
 import userRoutes from "./users/index";
 import escrowRoutes from "./escrow/";
 import SMSController from "./controller/sms/SMSController";
+import { UserController } from "./controller/UsersController.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,7 +32,7 @@ app.use("/api/v1/send/sms", smsRoutes);
 // app.use("/api/v1/sms/cost", smsRoutes)
 
 // User Routes
-app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/users", UserController);
 
 
 // Escrow / Admin Routes

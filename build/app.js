@@ -8,9 +8,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 // Load .env file
 const dotenv_1 = __importDefault(require("dotenv"));
 const index_js_1 = __importDefault(require("./sms/index.js"));
-const index_1 = __importDefault(require("./users/index"));
 const escrow_1 = __importDefault(require("./escrow/"));
 const SMSController_1 = __importDefault(require("./controller/sms/SMSController"));
+const UsersController_js_1 = require("./controller/UsersController.js");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 // Load dotenv configs
@@ -25,7 +25,7 @@ app.get("/users", async (req, res) => {
 app.use("/api/v1/send/sms", index_js_1.default);
 // app.use("/api/v1/sms/cost", smsRoutes)
 // User Routes
-app.use("/api/v1/users", index_1.default);
+app.use("/api/v1/users", UsersController_js_1.UserController);
 // Escrow / Admin Routes
 app.use("/api/v1/escrow", escrow_1.default);
 /**

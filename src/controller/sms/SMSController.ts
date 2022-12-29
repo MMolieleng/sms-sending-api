@@ -1,10 +1,9 @@
-import userRepository from "../../repositories/UserRepository.js"
+import UserRepository from "../../repositories/UserRepository"
 import SmsService from "../../service/SmsService.js"
 
 class SMSController {
-        smsService : SmsService
-        constructor() {
-                this.smsService = new SmsService(userRepository)
+        constructor(private smsService: any = SmsService) {
+                this.smsService = new SmsService(UserRepository)
         }
 
         /**
@@ -13,7 +12,7 @@ class SMSController {
          * @param {string phone number} toPhoneNumber 
          */
         async sendSMS(text: string, to: string) {
-                
+
                 // this.smsService.findByApiKey()
                 // this.smsService.findByApiKey(text, to)
         }

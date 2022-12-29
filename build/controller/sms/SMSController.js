@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserRepository_js_1 = __importDefault(require("../../repositories/UserRepository.js"));
+const UserRepository_1 = __importDefault(require("../../repositories/UserRepository"));
 const SmsService_js_1 = __importDefault(require("../../service/SmsService.js"));
 class SMSController {
     smsService;
-    constructor() {
-        this.smsService = new SmsService_js_1.default(UserRepository_js_1.default);
+    constructor(smsService = SmsService_js_1.default) {
+        this.smsService = smsService;
+        this.smsService = new SmsService_js_1.default(UserRepository_1.default);
     }
     /**
      *

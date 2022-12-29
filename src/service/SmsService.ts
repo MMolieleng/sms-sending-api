@@ -2,7 +2,7 @@ import UserRepository from "../repositories/UserRepository";
 
 class SmsService {
 
-        constructor(private userRepository : any) {
+        constructor(private userRepository : any = UserRepository) {
                 this.userRepository = userRepository ;
         }
 
