@@ -30,6 +30,12 @@ class SmsService {
                 return { apiKey: userAccount.apiKey, balance: userAccount.balance } as UserAccountDto
         }
 
+        /**
+         * This uses Twilio lookup API to validate phone numbers
+         * Documentation https://www.twilio.com/docs/lookup/v2-api
+         * @param phoneNumber 
+         * @returns Boolean to indicate if the phone number is valid or not
+         */
         async isValidPhoneNumber(phoneNumber: string): Promise<boolean> {
 
                 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
