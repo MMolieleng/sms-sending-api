@@ -1,5 +1,6 @@
-import express, { Request, Response } from "express"
+import express, { request, Request, Response } from "express"
 import SmsService from "../../service/SmsService"
+import twilio from "twilio";
 
 
 const SMSController = express.Router()
@@ -8,8 +9,6 @@ const smsService = new SmsService();
 SMSController.post("/", async (request: Request, response: Response) => {
         const { message, to } = request.body
         const { authorization } = request.headers
-
-        console.log({ authorization })
 
         if (!authorization) {
                 throw new Error("API key not provided")
@@ -27,7 +26,26 @@ SMSController.post("/", async (request: Request, response: Response) => {
 
         const responseData = await smsService.sendSMS(message.trim(), to.trim(), authorization.trim());
 
-        response.json(responseData).status(201)
+        if (responseData && responseData.error) {
+                response.status(400).json(responseData)
+                return;
+        }
+        response.status(201).json(responseData)
         return;
+})
+
+
+SMSController.get("/lookup/:phoneNumber", async (request: Request, response: Response) => {
+        const { phoneNumber } = request.params
+
+        const ACC_SID = "AC00c65b79fc6ae882aa45d73ccefda3fe";
+        const AUTH_TOKEN = "6078d2500d7ef9e1016878d65c4d0788"
+        const client = twilio(ACC_SID, AUTH_TOKEN);
+
+        const res = await client.lookups.v2.phoneNumbers(phoneNumber)
+                .fetch()
+
+        response.send(res)
+
 })
 export default SMSController

@@ -1,4 +1,6 @@
 import axios from "axios";
+import twilio from "twilio";
+import { PhoneNumberContext, PhoneNumberInstance } from "twilio/lib/rest/lookups/v2/phoneNumber";
 import UserAccountDto from "../dto/UserAccountDto";
 import UserRepository from "../repositories/UserRepository";
 import SenderService from "./SenderService";
@@ -28,6 +30,19 @@ class SmsService {
                 return { apiKey: userAccount.apiKey, balance: userAccount.balance } as UserAccountDto
         }
 
+        async isValidPhoneNumber(phoneNumber: string): Promise<boolean> {
+
+                const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+                const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+                const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+                const numberValidationResponse: PhoneNumberInstance = await client.lookups.v2.phoneNumbers(phoneNumber)
+                        .fetch()
+
+                console.info({ numberValidationResponse })
+                return numberValidationResponse.valid
+        }
+
         async getNetworkCost(toPhoneNumber: String): Promise<{ status: Number, message: String, cost: Number, reason: String }> {
                 const params = {
                         action: "route_check_price",
@@ -49,11 +64,15 @@ class SmsService {
          * @param {object : {balance, apiKey} user object } user 
          */
         async sendSMS(text: String, to: String, apiKey: String) {
+
+                const isValidNumber = await this.isValidPhoneNumber(to.valueOf());
+
+                if (!isValidNumber) {
+                        return { message: `Invalid phone number ${to}`, error: true }
+                }
+
                 const smsCost = await this.getNetworkCost(to);
                 const userAccount = await this.getUserAccountByApiKey(apiKey);
-
-                console.log({ smsCost })
-                console.log({ userAccount })
 
                 if (smsCost.cost >= userAccount.balance) {
                         return { message: `Insufficient funds, network cost = ${smsCost.cost}, your balance = ${userAccount.balance}`, error: true }
