@@ -1,3 +1,3 @@
 export type UserDto = {
-        apiKey: String
+        apiKey: string
 }

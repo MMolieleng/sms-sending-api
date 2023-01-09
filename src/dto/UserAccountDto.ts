@@ -1,6 +1,6 @@
 type UserAccountDto = {
-        apiKey: String;
-        balance: Number;
+        apiKey: string;
+        balance: number;
 }
 
 export default UserAccountDto

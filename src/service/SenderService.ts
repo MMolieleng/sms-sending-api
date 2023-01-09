@@ -7,7 +7,7 @@ class SenderService {
                 this.api = api
         }
 
-        async sendWithPanacea(text: String, to: String): Promise<PanaceaResponseDto> {
+        async sendWithPanacea(text: string, to: string): Promise<PanaceaResponseDto> {
 
                 try {
                         const params = {

@@ -6,25 +6,25 @@ class UserRepository {
         async findAllUsers() {
                 return await User.find()
         }
-        async findUserByPhoneNumber(phoneNumber: String) {
+        async findUserByPhoneNumber(phoneNumber: string) {
                 return await User.findOne({ phoneNumber })
                         .select("-password")
                         .populate("account");
         }
 
-        async findUserByEmailAddress(emailAddress: String) {
+        async findUserByEmailAddress(emailAddress: string) {
                 return await User.findOne({ emailAddress })
                         .select("-password")
                         .populate("account");
         }
 
-        async findUserByApiKey(apiKey: String) {
+        async findUserByApiKey(apiKey: string) {
                 return await User.findOne({ "account.apiKey": apiKey })
                         .select("-password")
                         .populate("account");
         }
 
-        async findUserAccountByAPIKey(apiKey: String): Promise<UserAccountDto> {
+        async findUserAccountByAPIKey(apiKey: string): Promise<UserAccountDto> {
 
                 const dbResponse = await User.findOne({ "account.apiKey": apiKey })
                         .select("-password")
@@ -41,7 +41,7 @@ class UserRepository {
                 return accountDto
         }
 
-        async updateAccountByApiKey(newAccountBalance: Number, apiKey: String) {
+        async updateAccountByApiKey(newAccountBalance: number, apiKey: string) {
                 const updatedAccount = await User.findOneAndUpdate(
                         { "account.apiKey": apiKey },
                         { $set: { "account.balance": newAccountBalance } },

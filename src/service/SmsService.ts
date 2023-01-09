@@ -1,6 +1,6 @@
 import axios from "axios";
 import twilio from "twilio";
-import { PhoneNumberContext, PhoneNumberInstance } from "twilio/lib/rest/lookups/v2/phoneNumber";
+import { PhoneNumberInstance } from "twilio/lib/rest/lookups/v2/phoneNumber";
 import UserAccountDto from "../dto/UserAccountDto";
 import UserRepository from "../repositories/UserRepository";
 import SenderService from "./SenderService";
@@ -11,7 +11,7 @@ class SmsService {
                 this.userRepository = userRepository;
         }
 
-        async findByApiKey(apiKey: String) {
+        async findByApiKey(apiKey: string) {
                 const user = await this.userRepository.findUserByApiKey(apiKey)
                 if (!user) {
                         throw new Error('Invalid api key');
@@ -19,7 +19,7 @@ class SmsService {
                 return user;
         }
 
-        async getUserAccountByApiKey(apiKey: String): Promise<UserAccountDto> {
+        async getUserAccountByApiKey(apiKey: string): Promise<UserAccountDto> {
                 const user = await this.userRepository.findUserByApiKey(apiKey)
                 const userAccount = user?.account
 
@@ -37,9 +37,11 @@ class SmsService {
          * @returns Boolean to indicate if the phone number is valid or not
          */
         async isValidPhoneNumber(phoneNumber: string): Promise<boolean> {
+                console.log("Phovided Phone : ", { phoneNumber })
 
                 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
                 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+
                 const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
                 const numberValidationResponse: PhoneNumberInstance = await client.lookups.v2.phoneNumbers(phoneNumber)
@@ -49,7 +51,7 @@ class SmsService {
                 return numberValidationResponse.valid
         }
 
-        async getNetworkCost(toPhoneNumber: String): Promise<{ status: Number, message: String, cost: Number, reason: String }> {
+        async getNetworkCost(toPhoneNumber: string): Promise<{ status: number, message: string, cost: number, reason: string }> {
                 const params = {
                         action: "route_check_price",
                         username: process.env.P_USERNAME,
@@ -90,6 +92,7 @@ class SmsService {
                 console.info({ sendMessageResponse })
 
                 if (sendMessageResponse && sendMessageResponse.message == "Sent") {
+                        // TODO : Deduct profit margin
                         const newAccountBalance = userAccount.balance.valueOf() - smsCost.cost.valueOf();
                         const roundedNewBalance = Math.floor(newAccountBalance * 100) / 100
                         const updatedBalance = await this.userRepository.updateAccountByApiKey(roundedNewBalance, apiKey)
@@ -105,7 +108,7 @@ class SmsService {
                 return { accounts }
         }
 
-        private async send(text: String, to: String) {
+        private async send(text: string, to: string) {
                 const downstreamResponse = await SenderService.sendWithPanacea(text, to)
                 console.info({ downstreamResponse })
                 return downstreamResponse;

@@ -5,10 +5,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 // Models
-// import SMSMessage from "../models/sms";
-import panaceaSender from "./sms/sender.js";
-import smsRoutes from "./sms/index.js";
-import userRoutes from "./users/index";
+
 import escrowRoutes from "./escrow/";
 import SMSController from "./controller/sms/SMSController";
 import { UserController } from "./controller/UsersController";
@@ -23,12 +20,10 @@ app.use(express.json());
 
 app.get("/api/v1/users", UserController)
 
+
 // For Sending SMS
 app.use("/api/v1/send/sms", SMSController);
 // app.use("/api/v1/sms/cost", smsRoutes)
-
-// User Routes
-app.use("/api/v1/users", UserController);
 
 
 // Escrow / Admin Routes

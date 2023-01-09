@@ -2,11 +2,11 @@ import axios from "axios";
 
 class DownStreamService {
 
-        constructor(private baseUrl: String = "") {
+        constructor(private baseUrl: string = "") {
                 this.baseUrl = baseUrl;
         }
 
-        async getNetworkCost(phoneNumber: String) {
+        async getNetworkCost(phoneNumber: string) {
 
         }
 }
