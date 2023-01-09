@@ -71,7 +71,7 @@ class SmsService {
          * @param {string : phone number that we are sending to} to 
          * @param {object : {balance, apiKey} user object } user 
          */
-        async sendSMS(text: String, to: String, apiKey: String) {
+        async sendSMS(text: string, to: string, apiKey: string) {
 
                 const isValidNumber = await this.isValidPhoneNumber(to.valueOf());
 
