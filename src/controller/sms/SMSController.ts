@@ -1,12 +1,14 @@
 import express, { request, Request, Response } from "express"
 import SmsService from "../../service/SmsService"
 import twilio from "twilio";
+import { AnyNsRecord } from "dns";
 
 
 const SMSController = express.Router()
 const smsService = new SmsService();
 
 SMSController.post("/", async (request: Request, response: Response) => {
+        console.log("hiiiit")
         const { message, to } = request.body
         const { authorization } = request.headers
 
@@ -30,7 +32,7 @@ SMSController.post("/", async (request: Request, response: Response) => {
                 response.status(400).json(responseData)
                 return;
         }
-        response.status(201).json(responseData)
+        response.status(200).json(responseData)
         return;
 })
 
@@ -48,4 +50,11 @@ SMSController.get("/lookup/:phoneNumber", async (request: Request, response: Res
         response.send(res)
 
 })
+
+
+SMSController.post("/test", async (request: Request, response: Response) => {
+
+})
+
+
 export default SMSController

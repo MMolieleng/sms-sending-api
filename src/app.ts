@@ -9,9 +9,10 @@ import dotenv from "dotenv";
 import escrowRoutes from "./escrow/";
 import SMSController from "./controller/sms/SMSController";
 import { UserController } from "./controller/UsersController";
+import userRoutes from "./users";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 // Load dotenv configs
 dotenv.config();
